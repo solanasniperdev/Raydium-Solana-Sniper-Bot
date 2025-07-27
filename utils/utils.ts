@@ -1,22 +1,17 @@
 import dotenv from 'dotenv';
 import axios, { AxiosResponse } from 'axios';
-import { logger } from '../buy';
-import { res } from 'pino-std-serializers';
-import { Logger } from 'pino';
 
 import { Keypair, Connection, SlotInfo, clusterApiUrl, SystemProgram, PublicKey, Transaction } from '@solana/web3.js';
-import fs from 'fs/promises'; 
-import winston from 'winston';
 import { BehaviorSubject } from 'rxjs';
 import bs58 from 'bs58';
 
 
 dotenv.config();
 
-export const retrieveEnvVariable = (variableName: string, logger: Logger) => {
+export const retrieveEnvVariable = (variableName: string) => {
   const variable = process.env[variableName] || '';
   if (!variable) {
-    logger.error(`${variableName} is not set`);
+    console.log(`${variableName} is not set`);
     process.exit(1);
   }
   return variable;
@@ -97,7 +92,7 @@ export const retrieveTokenValueByAddressDexScreener = async (tokenAddress: strin
 };
 
 export const retrieveTokenValueByAddressBirdeye = async (tokenAddress: string) => {
-  const apiKey = retrieveEnvVariable('BIRDEYE_API_KEY', logger);
+  const apiKey = retrieveEnvVariable('BIRDEYE_API_KEY');
   const url = `https://public-api.birdeye.so/public/price?address=${tokenAddress}`
   try {
     const response: string = (await axios.get(url, {
